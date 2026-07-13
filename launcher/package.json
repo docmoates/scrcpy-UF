@@ -1,0 +1,14 @@
+{
+  "name": "scrcpy-launcher",
+  "version": "1.0.0",
+  "description": "scrcpy-UF GUI Launcher",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . scrcpy-launcher --platform=darwin --arch=arm64 --icon=build/icon.icns --app-bundle-id=com.docmoates.scrcpylauncher --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/build/icon.iconset\""
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.0.0",
+    "electron": "^35.0.0"
+  }
+}

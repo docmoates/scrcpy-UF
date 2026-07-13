@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scrcpy Launcher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="titlebar"></div>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="2" width="14" height="20" rx="2" stroke="#6c8cff" stroke-width="1.5"/>
+          <circle cx="12" cy="18.5" r="1" fill="#6c8cff"/>
+        </svg>
+        <div>
+          <h1>scrcpy-UF</h1>
+          <p class="subtitle">Android Display Launcher</p>
+        </div>
+      </div>
+      <div id="binary-status" class="badge badge--checking">Checking…</div>
+    </header>
+
+    <div class="columns">
+    <div class="col">
+
+    <!-- Mode Selection -->
+    <section class="section">
+      <h2>Display Mode</h2>
+      <div class="mode-grid">
+        <label class="mode-card" data-mode="regular">
+          <input type="radio" name="mode" value="regular" checked />
+          <div class="mode-icon">📱</div>
+          <div class="mode-body">
+            <strong>Regular</strong>
+            <span>Mirror the phone's main screen</span>
+          </div>
+        </label>
+
+        <label class="mode-card" data-mode="fold">
+          <input type="radio" name="mode" value="fold" />
+          <div class="mode-icon">📖</div>
+          <div class="mode-body">
+            <strong>Fold Open</strong>
+            <span>Virtual inner display for foldables</span>
+          </div>
+        </label>
+
+        <label class="mode-card" data-mode="desktop">
+          <input type="radio" name="mode" value="desktop" />
+          <div class="mode-icon">🖥️</div>
+          <div class="mode-body">
+            <strong>Desktop / DeX</strong>
+            <span>Pixel Desktop or Samsung DeX mode</span>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <!-- Fold sub-options -->
+    <section class="section sub-section" id="fold-options" hidden>
+      <h2>Fold Resolution</h2>
+      <div class="radio-list">
+        <label><input type="radio" name="fold-res" value="2092x2092" checked /> Pixel Fold inner — 2092 × 2092</label>
+        <label><input type="radio" name="fold-res" value="2160x1856" /> Galaxy Z Fold 6 — 2160 × 1856</label>
+        <label><input type="radio" name="fold-res" value="custom" /> Custom…</label>
+      </div>
+      <div id="fold-custom" class="custom-input" hidden>
+        <input type="text" id="fold-custom-val" placeholder="e.g. 2208x1768" />
+      </div>
+    </section>
+
+    <!-- Desktop sub-options -->
+    <section class="section sub-section" id="desktop-options" hidden>
+      <h2>Desktop Resolution</h2>
+      <div class="radio-list">
+        <label><input type="radio" name="desk-res" value="1920x1080" checked /> 1080p — Pixel Desktop &amp; DeX</label>
+        <label><input type="radio" name="desk-res" value="2560x1440" /> 2K / QHD — 2560 × 1440</label>
+        <label><input type="radio" name="desk-res" value="custom" /> Custom…</label>
+      </div>
+      <div id="desk-custom" class="custom-input" hidden>
+        <input type="text" id="desk-custom-val" placeholder="e.g. 1680x1050" />
+      </div>
+
+      <h2 style="margin-top:6px">Scale (DPI)</h2>
+      <div class="radio-list horizontal">
+        <label><input type="radio" name="desk-dpi" value="140" /> Compact</label>
+        <label><input type="radio" name="desk-dpi" value="160" checked /> Desktop</label>
+        <label><input type="radio" name="desk-dpi" value="200" /> Large</label>
+      </div>
+    </section>
+
+    </div><!-- /col -->
+    <div class="col">
+
+    <!-- Device -->
+    <section class="section" id="device-section" hidden>
+      <h2>Device</h2>
+      <div class="custom-input">
+        <select id="device-select"></select>
+      </div>
+    </section>
+
+    <!-- Connection -->
+    <section class="section">
+      <h2>Connection</h2>
+      <div class="radio-list horizontal">
+        <label><input type="radio" name="conn" value="usb" checked /> USB</label>
+        <label><input type="radio" name="conn" value="wifi" /> Wi-Fi / TCP-IP</label>
+      </div>
+      <div id="wifi-input" class="custom-input" hidden>
+        <input type="text" id="wifi-ip" placeholder="192.168.1.100" />
+      </div>
+    </section>
+
+    <!-- Extras -->
+    <section class="section">
+      <h2>Options</h2>
+      <div class="checkbox-grid">
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-top" />
+          <span>Always on top</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-fullscreen" />
+          <span>Fullscreen</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-record" />
+          <span>Record to Desktop</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-awake" />
+          <span>Keep device awake</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-noaudio" />
+          <span>No audio</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="opt-nocontrol" />
+          <span>View only (no input)</span>
+        </label>
+      </div>
+    </section>
+
+    </div><!-- /col -->
+    <div class="col">
+
+    <!-- Transfer -->
+    <section class="section">
+      <h2>Transfer to Device</h2>
+      <div class="transfer-row">
+        <button id="install-apk-btn" class="xfer-btn">📦 Install APK…</button>
+        <button id="push-file-btn" class="xfer-btn">📁 Push File(s)…</button>
+      </div>
+      <label class="xfer-target">
+        <span>Push destination</span>
+        <input type="text" id="push-target" value="/sdcard/Download/" />
+      </label>
+      <pre id="transfer-log" class="brew-log" hidden></pre>
+    </section>
+
+    <!-- Command preview -->
+    <section class="section">
+      <h2>Command Preview</h2>
+      <pre id="cmd-preview" class="cmd-preview">scrcpy</pre>
+    </section>
+
+    </div><!-- /col -->
+    </div><!-- /columns -->
+
+    <!-- Install panel (shown when scrcpy or adb missing) -->
+    <div id="install-panel" class="install-panel" hidden>
+      <div class="install-header">
+        <span class="install-icon">🍺</span>
+        <div>
+          <strong id="install-title">Setup needed</strong>
+          <span id="install-desc">Install missing tools via Homebrew.</span>
+        </div>
+      </div>
+      <button id="brew-scrcpy-btn" class="brew-btn" hidden>Install scrcpy</button>
+      <button id="brew-adb-btn" class="brew-btn" hidden>Install Android Platform Tools (adb)</button>
+      <pre id="brew-log" class="brew-log" hidden></pre>
+    </div>
+
+    <div id="status-msg" class="status-msg" hidden></div>
+
+    <button id="launch-btn" class="launch-btn" disabled>
+      Launch
+    </button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
