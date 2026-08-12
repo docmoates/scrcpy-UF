@@ -151,10 +151,11 @@ document.getElementById('wifi-ip').addEventListener('input', updatePreview)
 function buildArgs() {
   const args = []
 
-  // Max sharpness: H.265 at the highest bitrate hardware encoders reliably
-  // sustain, full native resolution (no scrcpy downscale).
+  // Max sharpness over USB: H.265, full native resolution (no scrcpy
+  // downscale). 100M is a ceiling, not a fixed rate — HEVC only spends
+  // that many bits on busy/high-motion frames, so this is safe at idle.
   args.push('--video-codec=h265')
-  args.push('--video-bit-rate=60M')
+  args.push('--video-bit-rate=100M')
   args.push('--max-size=0')
 
   const mode = document.querySelector('input[name=mode]:checked').value
