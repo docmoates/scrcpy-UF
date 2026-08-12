@@ -151,10 +151,11 @@ document.getElementById('wifi-ip').addEventListener('input', updatePreview)
 function buildArgs() {
   const args = []
 
-  // scrcpy defaults to 8 Mbps H.264, which is visibly soft on a high-res
-  // panel. Push bitrate way up and prefer H.265 (better detail per bit).
+  // Max sharpness: H.265 at the highest bitrate hardware encoders reliably
+  // sustain, full native resolution (no scrcpy downscale).
   args.push('--video-codec=h265')
-  args.push('--video-bit-rate=32M')
+  args.push('--video-bit-rate=60M')
+  args.push('--max-size=0')
 
   const mode = document.querySelector('input[name=mode]:checked').value
 
